@@ -1,9 +1,10 @@
-// routes/studentRoutes.js
+import mongoose from 'mongoose';
+import express from 'express';
+import { addStudent, getStudents, getStudentById } from '../controllers/studentController.js';
 
-const express = require('express');
 const router = express.Router();
-const studentController = require('../controllers/studentController');
+router.post('/', addStudent);
+router.get('/', getStudents);
+router.get('/:id', getStudentById);
 
-router.post('/students', studentController.createStudent);
-
-module.exports = router;
+export default router;

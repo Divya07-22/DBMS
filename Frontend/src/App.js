@@ -13,7 +13,7 @@ import FacultySignUp from "./pages/FacultySignUp";
 import DetailsPage from "./pages/student/Tables";  // Added import for DetailsPage
 import Dashboard2 from "./pages/Dashboard2";
 import StdDetails from "./pages/faculty/StdDetails";
-import StdDetailsView from "./pages/faculty/StdDetailsView";
+// import StdDetailsView from "./pages/faculty/StdDetailsView";
 function App() {
     return (
         <Router>
@@ -35,7 +35,7 @@ function App() {
                 /> {/* Added route for DetailsPage */}
                 <Route path="/faculty/dashboard" element={<Dashboard2 />} />
                  <Route path="/faculty/StdDetails" element={<StdDetails />} />
-                 <Route path="/faculty/StdDetailsView" element={<StdDetailsView />} />
+                 {/* <Route path="/faculty/StdDetailsView" element={<StdDetailsView />} /> */}
                  
             </Routes>
         </Router>

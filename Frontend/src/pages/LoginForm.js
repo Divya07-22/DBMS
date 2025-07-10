@@ -69,8 +69,8 @@ const LoginForm = () => {
 
             if (response.ok) {
                 localStorage.setItem("authToken", data.token);
-                if (data.user.role === "coordinator") {
-                    navigate("/coordinator/dashboard");
+                if (data.user.role === "student") {
+                    navigate("/student/details-page");
                 } else if (data.user.role === "faculty") {
                     navigate("/faculty/dashboard");
                 } else {

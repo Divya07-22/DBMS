@@ -1,73 +1,79 @@
 
 
-// controllers/recruiterController.js
-const db = require('../config/db');
+import Recruiter from '../models/Recruiter.js';
 
-// Create a recruiter
-exports.createRecruiter = (req, res) => {
-  const { company_name, contact_person, contact_email, contact_phone, location } = req.body;
+export const addRecruiter = async (req, res) => {
+  console.log('📥 Received recruiter data:', req.body);
+  
+  try {
+    // Create new recruiter with explicit field mapping
+    const recruiter = new Recruiter({
+      companyName: req.body.companyName,
+      contactPerson: req.body.contactPerson,
+      contactEmail: req.body.contactEmail,
+      contactPhone: req.body.contactPhone,
+      location: req.body.location
+    });
 
-  const query = 'INSERT INTO recruiters (company_name, contact_person, contact_email, contact_phone, location) VALUES (?, ?, ?, ?, ?)';
-
-  db.query(query, [company_name, contact_person, contact_email, contact_phone, location], (err, result) => {
-    if (err) {
-      console.error(err.message);
-      return res.status(500).json({ error: err.message });
+    const newRecruiter = await recruiter.save();
+    console.log(`✅ Recruiter created: ${newRecruiter.companyName} (ID: ${newRecruiter._id})`);
+    
+    res.status(201).json({
+      success: true,
+      message: 'Recruiter created successfully',
+      data: newRecruiter
+    });
+  } catch (err) {
+    console.error('❌ Error creating recruiter:', err.message);
+    
+    // Handle duplicate email error
+    if (err.code === 11000 && err.keyPattern?.contactEmail) {
+      return res.status(409).json({ 
+        success: false,
+        error: 'Contact email already exists' 
+      });
     }
-    res.status(201).json({ id: result.insertId, company_name, contact_person, contact_email, contact_phone, location });
-  });
+    
+    // Handle validation errors
+    if (err.name === 'ValidationError') {
+      const errors = Object.values(err.errors).map(e => e.message);
+      return res.status(400).json({ 
+        success: false,
+        error: 'Validation failed',
+        details: errors 
+      });
+    }
+    
+    // Generic server error
+    res.status(500).json({
+      success: false,
+      error: 'Internal server error',
+      ...(process.env.NODE_ENV === 'development' && { 
+        details: err.message 
+      })
+    });
+  }
 };
 
-// Get all recruiters
-exports.getRecruiters = (req, res) => {
-  const query = 'SELECT * FROM recruiters';
-
-  db.query(query, (err, results) => {
-    if (err) {
-      console.error(err.message);
-      return res.status(500).json({ error: err.message });
-    }
-    res.status(200).json(results);
-  });
-};
-
-// Update a recruiter
-exports.updateRecruiter = (req, res) => {
-  const { id } = req.params;
-  const { company_name, contact_person, contact_email, contact_phone, location } = req.body;
-
-  const query = 'UPDATE recruiters SET company_name = ?, contact_person = ?, contact_email = ?, contact_phone = ?, location = ? WHERE recruit_id = ?';
-
-  db.query(query, [company_name, contact_person, contact_email, contact_phone, location, id], (err, result) => {
-    if (err) {
-      console.error(err.message);
-      return res.status(500).json({ error: err.message });
-    }
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: 'Recruiter not found' });
-    }
-
-    res.status(200).json({ message: 'Recruiter updated successfully' });
-  });
-};
-
-// Delete a recruiter
-exports.deleteRecruiter = (req, res) => {
-  const { id } = req.params;
-
-  const query = 'DELETE FROM recruiters WHERE recruit_id = ?';
-
-  db.query(query, [id], (err, result) => {
-    if (err) {
-      console.error(err.message);
-      return res.status(500).json({ error: err.message });
-    }
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: 'Recruiter not found' });
-    }
-
-    res.status(200).json({ message: 'Recruiter deleted successfully' });
-  });
+export const getRecruiters = async (req, res) => {
+  try {
+    console.log('📤 Fetching all recruiters');
+    const recruiters = await Recruiter.find().sort({ createdAt: -1 });
+    
+    console.log(`✅ Found ${recruiters.length} recruiters`);
+    res.json({
+      success: true,
+      count: recruiters.length,
+      data: recruiters
+    });
+  } catch (err) {
+    console.error('❌ Error fetching recruiters:', err.message);
+    res.status(500).json({
+      success: false,
+      error: 'Internal server error',
+      ...(process.env.NODE_ENV === 'development' && { 
+        details: err.message 
+      })
+    });
+  }
 };

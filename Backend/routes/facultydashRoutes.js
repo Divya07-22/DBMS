@@ -1,9 +1,10 @@
-// facultydashRoutes.js
-const express = require('express');
-const { getFacultyQueryResult } = require('../controllers/facultydashController');
+
+import express from 'express';
+import { getFacultyQueryResult } from '../controllers/facultydashController.js';
+
 const router = express.Router();
 
 // Define the route to get query results
-router.get('/query/:selectedQuery', getFacultyQueryResult); // Notice this is '/query/:selectedQuery'
+router.get('/query/:selectedQuery', getFacultyQueryResult);
 
-module.exports = router;
+export default router;

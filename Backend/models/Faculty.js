@@ -1,10 +1,25 @@
-const db = require("../config/db");
+import mongoose from 'mongoose';
 
-const Faculty = {
-    create: (data, callback) => {
-        const query = "INSERT INTO faculties (name, email, password) VALUES (?, ?, ?)";
-        db.query(query, [data.name, data.email, data.password], callback);
-    },
-};
+const facultySchema = new mongoose.Schema({
+  name: { 
+    type: String, 
+    required: true 
+  },
+  email: { 
+    type: String, 
+    required: true, 
+    unique: true 
+  },
+  user: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User', 
+    required: true 
+  },
+  department: String,
+  createdAt: { 
+    type: Date, 
+    default: Date.now 
+  }
+});
 
-module.exports = Faculty;
+export default mongoose.model('Faculty', facultySchema);

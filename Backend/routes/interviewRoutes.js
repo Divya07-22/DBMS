@@ -1,7 +1,9 @@
-const express = require('express');
-const { createInterview } = require('../controllers/interviewController');
+import express from 'express';
+import { addInterview, getInterviewsByStudent } from '../controllers/interviewController.js';
+
 const router = express.Router();
 
-router.post('/', createInterview);
+router.post('/', addInterview);
+router.get('/student/:studentId', getInterviewsByStudent);
 
-module.exports = router;
+export default router;

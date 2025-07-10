@@ -1,15 +1,9 @@
-const express = require('express');
-const {
-  createRecruiter,
-  getRecruiters,
-  updateRecruiter,
-  deleteRecruiter,
-} = require('../controllers/recruiterController');
+import express from 'express';
+import { addRecruiter, getRecruiters } from '../controllers/recruiterController.js';
+
 const router = express.Router();
 
-router.post('/', createRecruiter);
+router.post('/', addRecruiter);
 router.get('/', getRecruiters);
-// router.put('/:id', updateRecruiter);
-// router.delete('/:id', deleteRecruiter);
 
-module.exports = router;
+export default router;

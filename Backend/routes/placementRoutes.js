@@ -1,7 +1,9 @@
-const express = require('express');
-const { createPlacement } = require('../controllers/placementController');
+import express from 'express';
+import { addPlacement, getPlacementsByStudent } from '../controllers/placementController.js';
+
 const router = express.Router();
 
-router.post('/', createPlacement);
+router.post('/', addPlacement);
+router.get('/student/:studentId', getPlacementsByStudent);
 
-module.exports = router;
+export default router;

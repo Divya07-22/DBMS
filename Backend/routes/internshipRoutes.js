@@ -1,8 +1,9 @@
-const express = require('express');
-const { createInternship, getInternships } = require('../controllers/internshipController');
+import express from 'express';
+import { addInternship, getInternships } from '../controllers/internshipController.js';
+
 const router = express.Router();
 
-router.post('/', createInternship);
+router.post('/', addInternship);
 router.get('/', getInternships);
 
-module.exports = router;
+export default router;

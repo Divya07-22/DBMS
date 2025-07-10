@@ -1,20 +1,9 @@
-const express = require('express');
-const {
-  createSkill,
-  getSkills,
-  updateSkill,
-  deleteSkill,
-} = require('../controllers/skillController');
+import express from 'express';
+import { addSkill, getSkillsByStudent } from '../controllers/skillController.js';
+
 const router = express.Router();
 
-router.post('/', createSkill);
-router.get('/', getSkills);
-// router.put('/:id', updateSkill);
-// router.delete('/:id', deleteSkill);
+router.post('/', addSkill);
+router.get('/student/:studentId', getSkillsByStudent);
 
-module.exports = router;
-
-
-
-
-
+export default router;

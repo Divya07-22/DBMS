@@ -1,32 +1,33 @@
-// const mysql = require('mysql2');
-// const db = mysql.createConnection({
-//   host: 'localhost',
-//   user: 'root',
-//   password: 'divdev123',  // Replace with your MySQL password
-//   database: 'stdplacement'  // Replace with your database name
-// });
-// db.connect(err => {
-//   if (err) throw err;
-//   console.log('Database connected');
-// });
-// module.exports = db;
+// const mongoose = require('mongoose');
 
+// const connectDB = async () => {
+//   try {
+//     await mongoose.connect(process.env.MONGO_URI, {
+//       useNewUrlParser: true,
+//       useUnifiedTopology: true
+//     });
+//     console.log('MongoDB Connected');
+//   } catch (err) {
+//     console.error(err.message);
+//     process.exit(1);
+//   }
+// };
 
-const mysql = require('mysql2');
+// module.exports = connectDB;
+const mongoose = require('mongoose');
 
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',   // Update with your database username
-  password: 'divdev123',   // Update with your database password
-  database: 'stdplacement',  // Update with your database name
-});
-
-db.connect((err) => {
-  if (err) {
-    console.error('Database connection failed: ', err.stack);
-    return;
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      dbName: 'placement_portal' // Specify database name
+    });
+    console.log('MongoDB Connected');
+  } catch (err) {
+    console.error(err.message);
+    process.exit(1);
   }
-  console.log('Connected to the database.');
-});
+};
 
-module.exports = db;
+module.exports = connectDB;
